@@ -91,7 +91,7 @@ def parse_args():
     parser.add_argument(
         '--vis-thred',
         type=float,
-        default=0.3,
+        default=0.5,
         help='Threshold the predicted results')
     parser.add_argument('--draw-gt', action='store_true')
     parser.add_argument(
@@ -116,7 +116,7 @@ def parse_args():
         choices=['video', 'image'],
         help='The desired format of the visualization result')
     parser.add_argument(
-        '--fps', type=int, default=20, help='Frame rate of video')
+        '--fps', type=int, default=2, help='Frame rate of video')
     parser.add_argument(
         '--video-prefix', type=str, default='vis', help='name of video')
     args = parser.parse_args()
@@ -208,6 +208,7 @@ def main():
         # image view
         imgs = []
         for view in views:
+
             img = cv2.imread(infos['cams'][view]['data_path'])
             # draw instances
             corners_img, valid = lidar2img(corners_lidar, infos['cams'][view])
@@ -216,15 +217,24 @@ def main():
                 check_point_in_img(corners_img, img.shape[0], img.shape[1]))
             valid = valid.reshape(-1, 8)
             corners_img = corners_img.reshape(-1, 8, 2).astype(np.int)
+
             for aid in range(valid.shape[0]):
-                for index in draw_boxes_indexes_img_view:
-                    if valid[aid, index[0]] and valid[aid, index[1]]:
-                        cv2.line(
-                            img,
-                            corners_img[aid, index[0]],
-                            corners_img[aid, index[1]],
-                            color=color_map[int(pred_flag[aid])],
-                            thickness=scale_factor)
+                #qiu: if score < threshold, not draw.
+                if scores[aid] >= args.vis_thred:
+                    for index in draw_boxes_indexes_img_view:
+                        if valid[aid, index[0]] and valid[aid, index[1]]:
+                            # cv2.line(img,(1371,600),(1368,488),color=(0,255,0),thickness=9)
+                            a = corners_img[aid, index[0]]
+                            a = tuple(a)
+                            b = tuple(corners_img[aid, index[1]])
+                            c= color_map[int(pred_flag[aid])]
+                            c =tuple(c)
+                            cv2.line(
+                                img,
+                                a,
+                                b,
+                                color=c,
+                                thickness=scale_factor)
             imgs.append(img)
 
         # bird-eye-view
@@ -237,6 +247,8 @@ def main():
         lidar_points[:, :2] = \
             (lidar_points[:, :2] + show_range) / show_range / 2.0 * canva_size
         for p in lidar_points:
+            # qiu:error , canvas.shape[0] is height, canvas.shape[1] is width.
+            #if height != width ,result will be wrong.
             if check_point_in_img(
                     p.reshape(1, 3), canvas.shape[1], canvas.shape[0])[0]:
                 color = depth2color(p[2])
@@ -270,15 +282,15 @@ def main():
             for index in draw_boxes_indexes_bev:
                 cv2.line(
                     canvas,
-                    bottom_corners_bev[rid, index[0]],
-                    bottom_corners_bev[rid, index[1]],
-                    [color[0] * score, color[1] * score, color[2] * score],
+                    tuple(bottom_corners_bev[rid, index[0]]),
+                    tuple(bottom_corners_bev[rid, index[1]]),
+                    tuple([color[0] * score, color[1] * score, color[2] * score]),
                     thickness=1)
             cv2.line(
                 canvas,
-                center_canvas[rid],
-                head_canvas[rid],
-                [color[0] * score, color[1] * score, color[2] * score],
+                tuple(center_canvas[rid]),
+                tuple(head_canvas[rid]),
+                tuple([color[0] * score, color[1] * score, color[2] * score]),
                 1,
                 lineType=8)
 
@@ -295,7 +307,8 @@ def main():
         w_begin = int((1600 * 3 / scale_factor - canva_size) // 2)
         img[int(900 / scale_factor):int(900 / scale_factor) + canva_size,
             w_begin:w_begin + canva_size, :] = canvas
-
+        # import matplotlib.pyplot as plt
+        # plt.imshow(img)
         if args.format == 'image':
             cv2.imwrite(os.path.join(vis_dir, '%s.jpg' % infos['token']), img)
         elif args.format == 'video':
