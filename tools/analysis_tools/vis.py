@@ -164,17 +164,29 @@ def main():
             print('%d/%d' % (cnt, min(args.vis_frames, len(dataset['infos']))))
         # collect instances
         pred_res = res['results'][infos['token']]
-        pred_boxes = [
-            pred_res[rid]['translation'] + pred_res[rid]['size'] + [
-                Quaternion(pred_res[rid]['rotation']).yaw_pitch_roll[0] +
-                np.pi / 2
-            ] for rid in range(len(pred_res))
-        ]
+        pred_boxes = []
+        for rid in range(len(pred_res)):
+
+            wlh2lwh = pred_res[rid]['size']
+            tmp = pred_res[rid]['size'][0]
+            wlh2lwh[0] = wlh2lwh[1]
+            wlh2lwh[1] = tmp
+
+
+            pred_boxes.append(pred_res[rid]['translation'] + wlh2lwh + [
+                    Quaternion(pred_res[rid]['rotation']).yaw_pitch_roll[0]
+                ] )
+
         if len(pred_boxes) == 0:
             corners_lidar = np.zeros((0, 3), dtype=np.float32)
         else:
             pred_boxes = np.array(pred_boxes, dtype=np.float32)
             boxes = LB(pred_boxes, origin=(0.5, 0.5, 0.0))
+
+            #test
+            # t = np.array([[0,0,0,5,2,1,0]])
+            # boxest = LB(t, origin=(0.5, 0.5, 0.0))
+            # a = boxest.corners.numpy()
             corners_global = boxes.corners.numpy().reshape(-1, 3)
             corners_global = np.concatenate(
                 [corners_global,
@@ -266,7 +278,7 @@ def main():
             (bottom_corners_bev + show_range) / show_range / 2.0 * canva_size
         bottom_corners_bev = np.round(bottom_corners_bev).astype(np.int32)
         center_bev = corners_lidar[:, [0, 3, 7, 4], :2].mean(axis=1)
-        head_bev = corners_lidar[:, [0, 4], :2].mean(axis=1)
+        head_bev = corners_lidar[:, [4,7], :2].mean(axis=1)
         canter_canvas = \
             (center_bev + show_range) / show_range / 2.0 * canva_size
         center_canvas = canter_canvas.astype(np.int32)

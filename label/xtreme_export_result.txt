@@ -1,0 +1,65 @@
+[
+  {
+    "sourceType": "EXTERNAL_GROUND_TRUTH",
+    "objects": [
+      {
+        "id": "c61115ee-34d1-4092-a09a-319c8eb5c85d",
+        "type": "3D_BOX",
+        "trackId": "898s1oGD9sxsk1Im",
+        "trackName": "2",
+        "contour": {
+          "center3D": {
+            "x": -4.130848247853933,
+            "y": 5.379447631179628,
+            "z": -0.755553925847358
+          },
+          "pointN": 644,
+          "points": [
+          ],
+          "rotation3D": {
+            "x": 0,
+            "y": 0,
+            "z": -1.5707962474953532
+          },
+          "size3D": {
+            "x": 4.599530040266645,
+            "y": 1.8559093355281777,
+            "z": 1.7911078516947205
+          }
+        },
+        "modelConfidence": null,
+        "modelClass": "",
+        "className": "car"
+      },
+      {
+        "id": "eeedb5c8-7d36-41c1-a6e3-54d01d51efef",
+        "type": "3D_BOX",
+        "trackId": "Qwhp9sAFuBKYyzXR",
+        "trackName": "5",
+        "contour": {
+          "center3D": {
+            "x": 7.365120119231344,
+            "y": 5.959507657209616,
+            "z": -1.7978870820911954
+          },
+          "pointN": 7,
+          "points": [
+          ],
+          "rotation3D": {
+            "x": 0,
+            "y": 0,
+            "z": -1.5405028348206184
+          },
+          "size3D": {
+            "x": 0.6392602515656677,
+            "y": 0.8069503797988469,
+            "z": 2.5399999999999614
+          }
+        },
+        "modelConfidence": null,
+        "modelClass": "",
+        "className": "car"
+      }
+    ]
+  }
+]
