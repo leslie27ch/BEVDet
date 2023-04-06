@@ -1,0 +1,39 @@
+BAG_INFO:
+  TEAM: Bredton_AD
+  DESCRIPTION: Low speed multi-agent laps with KAIST
+  TRACK: HuDang
+  MAP: ZAOZHUANG
+SENSOR_INFO:
+  LIDAR_FRONT:
+    TOPIC: /iv_points
+    CALIB: lidar_perception_front
+  LIDAR_LEFT:
+    TOPIC: /os_cloud_node_1/points
+    CALIB: lidar_perception_left
+  LIDAR_RIGHT:
+    TOPIC: /os_cloud_node_2/points
+    CALIB: lidar_perception_right
+  LIDAR_BACK:
+    TOPIC: /rslidar_points
+    CALIB: lidar_perception_back
+  CAMERA_N:
+    TOPIC: /n_camera_gmsl_prep
+    CAMERA_0: /camera_gmsl_prep_0
+    CALIB_0: camera_perception_0
+    CAMERA_1: /camera_gmsl_prep_1
+    CALIB_1: camera_perception_1
+    CAMERA_2: /camera_gmsl_prep_2
+    CALIB_2: camera_perception_2
+    CAMERA_3: /camera_gmsl_prep_3
+    CALIB_3: camera_perception_3
+    CAMERA_4: /camera_gmsl_prep_4
+    CALIB_4: camera_perception_4
+    CAMERA_5: /camera_gmsl_prep_5
+    CALIB_5: camera_perception_5
+    CAMERA_6: /camera_gmsl_prep_6
+    CALIB_6: camera_perception_6
+    CAMERA_7: /camera_gmsl_prep_7
+    CALIB_7: camera_perception_7
+
+
+

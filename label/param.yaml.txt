@@ -1,0 +1,12 @@
+BAG_INFO:
+  TEAM: Bredton_AD
+  DESCRIPTION: Low speed multi-agent laps with KAIST
+  TRACK: ShanDong
+SENSOR_INFO:
+  CAMERA_FRONT:
+    TOPIC: /miivii_gmsl_ros/camera1
+    CALIB: camera_perception_front
+
+  CAMERA_RIGHT:
+    TOPIC: /miivii_gmsl_ros/camera2
+    CALIB: camera_perception_right
